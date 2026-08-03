@@ -1,0 +1,37 @@
+#ifndef CIDR_TOOLKIT_IPV4_NETWORK_HPP
+#define CIDR_TOOLKIT_IPV4_NETWORK_HPP
+
+#include <cstdint>
+#include <string>
+#include <string_view>
+
+namespace cidr_toolkit {
+
+class IPv4Network {
+public:
+    static IPv4Network parse(std::string_view cidr);
+
+    std::uint32_t address() const noexcept;
+    std::uint8_t prefix_length() const noexcept;
+    std::uint32_t subnet_mask() const noexcept;
+    std::uint32_t network_address() const noexcept;
+    std::uint32_t broadcast_address() const noexcept;
+    std::uint32_t first_usable_host() const noexcept;
+    std::uint32_t last_usable_host() const noexcept;
+    std::uint64_t usable_host_count() const noexcept;
+
+    bool is_point_to_point() const noexcept;
+    bool is_single_host() const noexcept;
+
+private:
+    IPv4Network(std::uint32_t address, std::uint8_t prefix_length) noexcept;
+
+    std::uint32_t address_;
+    std::uint8_t prefix_length_;
+};
+
+std::string format_ipv4(std::uint32_t address);
+
+} // namespace cidr_toolkit
+
+#endif
