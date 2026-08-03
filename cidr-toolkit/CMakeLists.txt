@@ -11,12 +11,13 @@ add_executable(cidr-toolkit src/main.cpp)
 target_link_libraries(cidr-toolkit PRIVATE cidr_toolkit_lib)
 
 if(MSVC)
-    target_compile_options(cidr_toolkit_lib PRIVATE /W4 /permissive-)
-    target_compile_options(cidr-toolkit PRIVATE /W4 /permissive-)
+    set(CIDR_TOOLKIT_WARNINGS /W4 /permissive-)
 else()
-    target_compile_options(cidr_toolkit_lib PRIVATE -Wall -Wextra -Wpedantic)
-    target_compile_options(cidr-toolkit PRIVATE -Wall -Wextra -Wpedantic)
+    set(CIDR_TOOLKIT_WARNINGS -Wall -Wextra -Wpedantic)
 endif()
+
+target_compile_options(cidr_toolkit_lib PRIVATE ${CIDR_TOOLKIT_WARNINGS})
+target_compile_options(cidr-toolkit PRIVATE ${CIDR_TOOLKIT_WARNINGS})
 
 include(CTest)
 
@@ -24,11 +25,6 @@ if(BUILD_TESTING)
     add_executable(cidr-toolkit-tests tests/test_ipv4_network.cpp)
     target_link_libraries(cidr-toolkit-tests PRIVATE cidr_toolkit_lib)
 
-    if(MSVC)
-        target_compile_options(cidr-toolkit-tests PRIVATE /W4 /permissive-)
-    else()
-        target_compile_options(cidr-toolkit-tests PRIVATE -Wall -Wextra -Wpedantic)
-    endif()
-
+    target_compile_options(cidr-toolkit-tests PRIVATE ${CIDR_TOOLKIT_WARNINGS})
     add_test(NAME ipv4-network-tests COMMAND cidr-toolkit-tests)
 endif()

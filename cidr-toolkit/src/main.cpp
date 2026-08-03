@@ -39,10 +39,10 @@ int main(int argc, char* argv[]) {
         print_field("Usable hosts:",
                     std::to_string(network.usable_host_count()));
 
-        if (network.is_point_to_point()) {
+        if (network.prefix_length() == 31) {
             std::cout << "Note: RFC 3021 permits both /31 addresses to be used "
                          "on point-to-point links.\n";
-        } else if (network.is_single_host()) {
+        } else if (network.prefix_length() == 32) {
             std::cout << "Note: A /32 represents a single-host route.\n";
         }
     } catch (const std::exception& error) {
