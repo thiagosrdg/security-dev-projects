@@ -20,9 +20,6 @@ public:
     std::uint32_t last_usable_host() const noexcept;
     std::uint64_t usable_host_count() const noexcept;
 
-    bool is_point_to_point() const noexcept;
-    bool is_single_host() const noexcept;
-
 private:
     IPv4Network(std::uint32_t address, std::uint8_t prefix_length) noexcept;
 

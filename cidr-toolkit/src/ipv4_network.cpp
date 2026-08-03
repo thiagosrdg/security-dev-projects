@@ -35,15 +35,15 @@ std::uint32_t parse_ipv4(std::string_view input) {
         const auto conversion = std::from_chars(
             octet_text.data(), octet_text.data() + octet_text.size(), octet);
 
+        if (conversion.ec == std::errc::result_out_of_range || octet > 255) {
+            throw std::invalid_argument(
+                "IPv4 octet is outside the valid range 0-255: " +
+                std::string(octet_text));
+        }
         if (conversion.ec != std::errc{} ||
             conversion.ptr != octet_text.data() + octet_text.size()) {
             throw std::invalid_argument(
                 "IPv4 octets must contain decimal digits only.");
-        }
-        if (octet > 255) {
-            throw std::invalid_argument(
-                "IPv4 octet is outside the valid range 0-255: " +
-                std::string(octet_text));
         }
 
         address = (address << 8U) | static_cast<std::uint32_t>(octet);
@@ -58,13 +58,13 @@ std::uint8_t parse_prefix(std::string_view input) {
     const auto conversion =
         std::from_chars(input.data(), input.data() + input.size(), prefix);
 
+    if (conversion.ec == std::errc::result_out_of_range || prefix > 32) {
+        throw std::invalid_argument("CIDR prefix must be between 0 and 32.");
+    }
     if (conversion.ec != std::errc{} ||
         conversion.ptr != input.data() + input.size()) {
         throw std::invalid_argument(
             "CIDR prefix must be a decimal number between 0 and 32.");
-    }
-    if (prefix > 32) {
-        throw std::invalid_argument("CIDR prefix must be between 0 and 32.");
     }
 
     return static_cast<std::uint8_t>(prefix);
@@ -138,14 +138,6 @@ std::uint64_t IPv4Network::usable_host_count() const noexcept {
     }
 
     return (std::uint64_t{1} << (32U - prefix_length_)) - 2U;
-}
-
-bool IPv4Network::is_point_to_point() const noexcept {
-    return prefix_length_ == 31;
-}
-
-bool IPv4Network::is_single_host() const noexcept {
-    return prefix_length_ == 32;
 }
 
 std::string format_ipv4(std::uint32_t address) {

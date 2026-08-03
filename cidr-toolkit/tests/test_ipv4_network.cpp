@@ -33,7 +33,11 @@ void expect_network(std::string_view cidr,
         const cidr_toolkit::IPv4Network network =
             cidr_toolkit::IPv4Network::parse(cidr);
         const std::string context = std::string(cidr) + " ";
+        const std::size_t separator = cidr.find('/');
 
+        expect_equal(cidr_toolkit::format_ipv4(network.address()),
+                     std::string(cidr.substr(0, separator)),
+                     context + "input address");
         expect_equal(cidr_toolkit::format_ipv4(network.subnet_mask()),
                      std::string(mask), context + "subnet mask");
         expect_equal(cidr_toolkit::format_ipv4(network.network_address()),
@@ -93,15 +97,8 @@ int main() {
     expect_invalid("invalid");
     expect_invalid("192.168.1.1/-1");
     expect_invalid("192.168.1.1/24/1");
-
-    const auto point_to_point =
-        cidr_toolkit::IPv4Network::parse("10.0.0.0/31");
-    expect_equal(point_to_point.is_point_to_point(), true,
-                 "/31 point-to-point classification");
-
-    const auto single_host = cidr_toolkit::IPv4Network::parse("127.0.0.1/32");
-    expect_equal(single_host.is_single_host(), true,
-                 "/32 single-host classification");
+    expect_invalid("999999999999999999999.1.1.1/24");
+    expect_invalid("192.168.1.1/999999999999999999999");
 
     if (failures != 0) {
         std::cerr << failures << " test assertion(s) failed.\n";
