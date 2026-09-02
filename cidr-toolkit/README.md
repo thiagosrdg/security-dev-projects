@@ -80,11 +80,38 @@ cidr-toolkit/
 ├── src/ipv4_network.cpp
 ├── src/main.cpp
 ├── tests/test_ipv4_network.cpp
-├── docs/design.md
 ├── CMakeLists.txt
 ├── README.md
 └── .gitignore
 ```
+
+## Design
+
+The calculation layer stores an IPv4 address as an unsigned 32-bit integer.
+The most significant byte represents the first dotted-decimal octet, and the
+least significant byte represents the fourth. Parsing validates exactly four
+decimal octets, then builds the integer by shifting the current value eight
+bits before adding each octet. Formatting performs the reverse operation.
+
+The subnet mask contains `prefix` high-order one bits followed by zero bits.
+`/0` is handled separately so the implementation never shifts a 32-bit value
+by 32 positions. The network and broadcast addresses are calculated as:
+
+```text
+network   = address AND mask
+broadcast = network OR (NOT mask)
+```
+
+For prefixes `/0` through `/30`, the usable range excludes the network and
+broadcast addresses. Under RFC 3021, both addresses in a `/31` may identify
+endpoints on a point-to-point link. A `/32` identifies one host route, so all
+reported address fields are the same address.
+
+`IPv4Network::parse` validates CIDR text and creates the numeric
+representation. The remaining `IPv4Network` methods perform the network
+calculations, while `format_ipv4` converts results back to dotted-decimal
+text. `main.cpp` handles command-line validation and presentation; tests call
+the calculation API directly.
 
 ## Known limitations
 
