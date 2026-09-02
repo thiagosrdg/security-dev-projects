@@ -1,0 +1,70 @@
+# Example configuration for LogSentinel.
+# Only the values written here override the built-in defaults.
+#
+#   python -m logsentinel analyze samples/auth.log --rules rules.yaml
+
+# Addresses and networks that never produce a finding.
+allowlist:
+  - 127.0.0.1
+  - 192.168.56.10
+
+rules:
+  excessive_auth_failures:
+    enabled: true
+    threshold: 10          # failed logins from one IP
+    window_minutes: 5
+    severity: high
+
+  account_targeting:
+    enabled: true
+    threshold: 3           # different accounts tried by one IP
+    window_minutes: 10
+    severity: medium
+
+  success_after_failures:
+    enabled: true
+    threshold: 5           # failures before the successful login
+    window_minutes: 10
+    severity: critical
+
+  suspicious_paths:
+    enabled: true
+    threshold: 3           # requests matching the patterns below
+    window_minutes: 5
+    severity: medium
+    patterns:
+      - /admin
+      - /wp-login
+      - /wp-admin
+      - /phpmyadmin
+      - /.env
+      - /.git
+      - /cgi-bin
+      - /shell
+      - /etc/passwd
+      - /config
+
+  http_error_flood:
+    enabled: true
+    threshold: 15          # error responses from one IP
+    window_minutes: 5
+    severity: medium
+    statuses: [401, 403, 404]
+
+  off_hours_activity:
+    enabled: true
+    threshold: 3           # events outside the business hours below
+    business_start: 8
+    business_end: 20
+    severity: low
+
+  port_scan:
+    enabled: true
+    threshold: 10          # different ports blocked by the firewall
+    window_minutes: 5
+    severity: high
+
+  anomalous_ip:
+    enabled: true
+    threshold: 2           # different rules triggered by the same IP
+    severity: high

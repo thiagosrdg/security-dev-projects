@@ -7,6 +7,7 @@ Each project is stored in its own directory and includes its source code, docume
 ## Projects
 
 - [`cidr-toolkit`](./cidr-toolkit) — A C++ command-line tool for IPv4 subnet and CIDR calculations.
+- [`logsentinel`](./logsentinel) — A Python command-line tool that analyses server logs and reports suspicious activity.
 
 ## Repository Structure
 
@@ -14,6 +15,7 @@ Each project is stored in its own directory and includes its source code, docume
 security-dev-projects/
 ├── README.md
 ├── cidr-toolkit/
+├── logsentinel/
 └── future-project/
 ```
 
