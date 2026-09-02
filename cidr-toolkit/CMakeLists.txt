@@ -1,7 +1,9 @@
+# Build configuration for the CIDR Toolkit library, CLI, and tests.
 cmake_minimum_required(VERSION 3.16)
 
 project(cidr_toolkit VERSION 1.0.0 LANGUAGES CXX)
 
+# Keep the network calculations reusable by both the application and tests.
 add_library(cidr_toolkit_lib src/ipv4_network.cpp)
 target_include_directories(cidr_toolkit_lib PUBLIC include)
 target_compile_features(cidr_toolkit_lib PUBLIC cxx_std_17)
@@ -22,6 +24,7 @@ target_compile_options(cidr-toolkit PRIVATE ${CIDR_TOOLKIT_WARNINGS})
 include(CTest)
 
 if(BUILD_TESTING)
+    # Register the standalone test executable with CTest.
     add_executable(cidr-toolkit-tests tests/test_ipv4_network.cpp)
     target_link_libraries(cidr-toolkit-tests PRIVATE cidr_toolkit_lib)
 

@@ -1,3 +1,4 @@
+// Basic behavior tests for IPv4 CIDR parsing and network calculations.
 #include "cidr_toolkit/ipv4_network.hpp"
 
 #include <cstdint>
@@ -15,6 +16,7 @@ template <typename Actual, typename Expected>
 void expect_equal(const Actual& actual,
                   const Expected& expected,
                   std::string_view description) {
+    // Count failures so all assertions can report before the process exits.
     if (actual != expected) {
         std::cerr << "FAIL: " << description << " (expected " << expected
                   << ", got " << actual << ")\n";
@@ -29,6 +31,7 @@ void expect_network(std::string_view cidr,
                     std::string_view first_host,
                     std::string_view last_host,
                     std::uint64_t host_count) {
+    // Verify every derived value for one representative CIDR network.
     try {
         const cidr_toolkit::IPv4Network network =
             cidr_toolkit::IPv4Network::parse(cidr);
@@ -59,6 +62,7 @@ void expect_network(std::string_view cidr,
 }
 
 void expect_invalid(std::string_view cidr) {
+    // Invalid CIDR text must throw std::invalid_argument.
     try {
         static_cast<void>(cidr_toolkit::IPv4Network::parse(cidr));
         std::cerr << "FAIL: expected invalid input to be rejected: " << cidr
@@ -75,6 +79,7 @@ void expect_invalid(std::string_view cidr) {
 } // namespace
 
 int main() {
+    // Cover ordinary networks, RFC 3021 /31, /32, /0, and invalid input.
     expect_network("192.168.10.37/27", "255.255.255.224", "192.168.10.32",
                    "192.168.10.63", "192.168.10.33", "192.168.10.62", 30);
     expect_network("10.0.0.1/8", "255.0.0.0", "10.0.0.0",

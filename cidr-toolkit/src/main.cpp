@@ -1,3 +1,4 @@
+// Command-line interface for displaying IPv4 CIDR network details.
 #include "cidr_toolkit/ipv4_network.hpp"
 
 #include <exception>
@@ -8,12 +9,14 @@
 namespace {
 
 void print_field(const std::string& label, const std::string& value) {
+    // Align labels to keep the command-line output easy to scan.
     std::cout << std::left << std::setw(20) << label << value << '\n';
 }
 
 } // namespace
 
 int main(int argc, char* argv[]) {
+    // The CLI accepts one CIDR value per invocation.
     if (argc != 2) {
         std::cerr << "Usage: " << argv[0] << " <IPv4/CIDR>\n";
         return 1;
@@ -39,6 +42,7 @@ int main(int argc, char* argv[]) {
         print_field("Usable hosts:",
                     std::to_string(network.usable_host_count()));
 
+        // Explain the special host rules for the two smallest networks.
         if (network.prefix_length() == 31) {
             std::cout << "Note: RFC 3021 permits both /31 addresses to be used "
                          "on point-to-point links.\n";

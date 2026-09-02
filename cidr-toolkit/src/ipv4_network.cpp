@@ -1,3 +1,4 @@
+// Implementation of IPv4 CIDR parsing, calculations, and formatting.
 #include "cidr_toolkit/ipv4_network.hpp"
 
 #include <charconv>
@@ -12,6 +13,7 @@ std::uint32_t parse_ipv4(std::string_view input) {
     std::uint32_t address = 0;
     std::size_t octet_start = 0;
 
+    // Parse exactly four decimal octets and pack them into one integer.
     for (int octet_index = 0; octet_index < 4; ++octet_index) {
         const std::size_t separator = input.find('.', octet_start);
         const bool is_last_octet = octet_index == 3;
@@ -54,6 +56,7 @@ std::uint32_t parse_ipv4(std::string_view input) {
 }
 
 std::uint8_t parse_prefix(std::string_view input) {
+    // from_chars rejects signs and non-decimal characters for this field.
     unsigned int prefix = 0;
     const auto conversion =
         std::from_chars(input.data(), input.data() + input.size(), prefix);
@@ -73,6 +76,7 @@ std::uint8_t parse_prefix(std::string_view input) {
 } // namespace
 
 IPv4Network IPv4Network::parse(std::string_view cidr) {
+    // Validate the CIDR separator before parsing either component.
     const std::size_t separator = cidr.find('/');
     if (separator == std::string_view::npos || separator == 0 ||
         separator + 1 == cidr.size() ||
@@ -97,6 +101,7 @@ std::uint8_t IPv4Network::prefix_length() const noexcept {
 }
 
 std::uint32_t IPv4Network::subnet_mask() const noexcept {
+    // Handle /0 separately because shifting by the type width is invalid.
     if (prefix_length_ == 0) {
         return 0;
     }
@@ -130,6 +135,7 @@ std::uint32_t IPv4Network::last_usable_host() const noexcept {
 }
 
 std::uint64_t IPv4Network::usable_host_count() const noexcept {
+    // /31 and /32 follow their point-to-point and single-host conventions.
     if (prefix_length_ == 31) {
         return 2;
     }
@@ -141,6 +147,7 @@ std::uint64_t IPv4Network::usable_host_count() const noexcept {
 }
 
 std::string format_ipv4(std::uint32_t address) {
+    // Extract each byte from most significant to least significant.
     return std::to_string((address >> 24U) & 0xFFU) + "." +
            std::to_string((address >> 16U) & 0xFFU) + "." +
            std::to_string((address >> 8U) & 0xFFU) + "." +

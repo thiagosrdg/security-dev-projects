@@ -1,3 +1,4 @@
+// Public interface for parsing and calculating IPv4 CIDR networks.
 #ifndef CIDR_TOOLKIT_IPV4_NETWORK_HPP
 #define CIDR_TOOLKIT_IPV4_NETWORK_HPP
 
@@ -9,10 +10,14 @@ namespace cidr_toolkit {
 
 class IPv4Network {
 public:
+    // Parse an address in the form "address/prefix".
     static IPv4Network parse(std::string_view cidr);
 
+    // Return the original address and prefix supplied by the caller.
     std::uint32_t address() const noexcept;
     std::uint8_t prefix_length() const noexcept;
+
+    // Return the derived subnet values.
     std::uint32_t subnet_mask() const noexcept;
     std::uint32_t network_address() const noexcept;
     std::uint32_t broadcast_address() const noexcept;
@@ -23,6 +28,7 @@ public:
 private:
     IPv4Network(std::uint32_t address, std::uint8_t prefix_length) noexcept;
 
+    // Store the address and prefix in compact numeric form.
     std::uint32_t address_;
     std::uint8_t prefix_length_;
 };
