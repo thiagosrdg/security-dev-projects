@@ -35,6 +35,9 @@ private:
 
 std::string format_ipv4(std::uint32_t address);
 
+// Format an address as dotted binary, for example "11000000.10101000...".
+std::string format_ipv4_binary(std::uint32_t address);
+
 } // namespace cidr_toolkit
 
 #endif

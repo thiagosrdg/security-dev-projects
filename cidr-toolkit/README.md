@@ -8,6 +8,7 @@ address in CIDR notation and reports its subnet details.
 - Strict IPv4 and CIDR prefix validation
 - Subnet mask, network, and broadcast address calculation
 - First host, last host, and usable host count calculation
+- Binary view of the address, mask, and network address
 - RFC 3021 behavior for `/31` point-to-point links
 - Single-host route behavior for `/32`
 - Clear errors and non-zero exit codes for invalid input
@@ -42,7 +43,14 @@ Broadcast address:  192.168.10.63
 First usable host:  192.168.10.33
 Last usable host:   192.168.10.62
 Usable hosts:       30
+
+IP:      11000000.10101000.00001010.00100101
+Mask:    11111111.11111111.11111111.11100000
+Network: 11000000.10101000.00001010.00100000
 ```
+
+The binary block prints the same three values bit by bit, so the boundary the
+prefix draws between the network and host portions is visible directly.
 
 Invalid values produce an error on standard error and exit with a non-zero
 status:
@@ -110,8 +118,9 @@ reported address fields are the same address.
 `IPv4Network::parse` validates CIDR text and creates the numeric
 representation. The remaining `IPv4Network` methods perform the network
 calculations, while `format_ipv4` converts results back to dotted-decimal
-text. `main.cpp` handles command-line validation and presentation; tests call
-the calculation API directly.
+text and `format_ipv4_binary` renders the same 32 bits as four dotted octets.
+`main.cpp` handles command-line validation and presentation; tests call the
+calculation API directly.
 
 ## Known limitations
 

@@ -13,6 +13,11 @@ void print_field(const std::string& label, const std::string& value) {
     std::cout << std::left << std::setw(20) << label << value << '\n';
 }
 
+void print_bit_field(const std::string& label, const std::string& value) {
+    // The binary block uses narrower labels so the bits stay aligned.
+    std::cout << std::left << std::setw(9) << label << value << '\n';
+}
+
 } // namespace
 
 int main(int argc, char* argv[]) {
@@ -42,12 +47,23 @@ int main(int argc, char* argv[]) {
         print_field("Usable hosts:",
                     std::to_string(network.usable_host_count()));
 
+        // Show the same values in binary so the mask boundary is visible.
+        std::cout << '\n';
+        print_bit_field("IP:",
+                        cidr_toolkit::format_ipv4_binary(network.address()));
+        print_bit_field(
+            "Mask:", cidr_toolkit::format_ipv4_binary(network.subnet_mask()));
+        print_bit_field(
+            "Network:",
+            cidr_toolkit::format_ipv4_binary(network.network_address()));
+
         // Explain the special host rules for the two smallest networks.
         if (network.prefix_length() == 31) {
-            std::cout << "Note: RFC 3021 permits both /31 addresses to be used "
+            std::cout << "\n"
+                         "Note: RFC 3021 permits both /31 addresses to be used "
                          "on point-to-point links.\n";
         } else if (network.prefix_length() == 32) {
-            std::cout << "Note: A /32 represents a single-host route.\n";
+            std::cout << "\nNote: A /32 represents a single-host route.\n";
         }
     } catch (const std::exception& error) {
         std::cerr << "Error: " << error.what() << '\n';

@@ -61,6 +61,12 @@ void expect_network(std::string_view cidr,
     }
 }
 
+void expect_binary(std::uint32_t address, std::string_view expected) {
+    // The binary rendering must show 32 bits grouped into four octets.
+    expect_equal(cidr_toolkit::format_ipv4_binary(address),
+                 std::string(expected), "binary formatting");
+}
+
 void expect_invalid(std::string_view cidr) {
     // Invalid CIDR text must throw std::invalid_argument.
     try {
@@ -95,6 +101,19 @@ int main() {
                    "127.0.0.1", "127.0.0.1", "127.0.0.1", 1);
     expect_network("0.0.0.0/0", "0.0.0.0", "0.0.0.0", "255.255.255.255",
                    "0.0.0.1", "255.255.255.254", 4294967294ULL);
+
+    // Cover the binary rendering used by the CLI bit view.
+    expect_binary(0, "00000000.00000000.00000000.00000000");
+    expect_binary(0xFFFFFFFFU, "11111111.11111111.11111111.11111111");
+    expect_binary(
+        cidr_toolkit::IPv4Network::parse("192.168.10.37/27").address(),
+        "11000000.10101000.00001010.00100101");
+    expect_binary(
+        cidr_toolkit::IPv4Network::parse("192.168.10.37/27").subnet_mask(),
+        "11111111.11111111.11111111.11100000");
+    expect_binary(
+        cidr_toolkit::IPv4Network::parse("192.168.10.37/27").network_address(),
+        "11000000.10101000.00001010.00100000");
 
     expect_invalid("192.168.1.300/24");
     expect_invalid("192.168.1.1/33");

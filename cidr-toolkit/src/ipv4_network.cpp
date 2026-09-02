@@ -154,4 +154,20 @@ std::string format_ipv4(std::uint32_t address) {
            std::to_string(address & 0xFFU);
 }
 
+std::string format_ipv4_binary(std::uint32_t address) {
+    // Emit 32 bits from most significant to least, grouped by octet.
+    std::string bits;
+    bits.reserve(35);
+
+    for (int bit_index = 31; bit_index >= 0; --bit_index) {
+        bits.push_back(((address >> bit_index) & 1U) ? '1' : '0');
+
+        if (bit_index % 8 == 0 && bit_index != 0) {
+            bits.push_back('.');
+        }
+    }
+
+    return bits;
+}
+
 } // namespace cidr_toolkit
