@@ -1,0 +1,2 @@
+# Only needed for the --rules option; the rest of the tool uses the standard library.
+PyYAML>=6.0

@@ -1,0 +1,20 @@
+2026-09-02 09:20:00 INFO login_success user=thiago ip=192.0.2.10 path=/login
+2026-09-02 09:21:30 INFO login_success user=thiago ip=192.0.2.10 path=/login
+2026-09-02 09:23:00 INFO login_success user=thiago ip=192.0.2.10 path=/login
+2026-09-02 09:24:30 INFO login_success user=thiago ip=192.0.2.10 path=/login
+2026-09-02 09:26:00 INFO login_success user=thiago ip=192.0.2.10 path=/login
+2026-09-02 16:40:05 WARNING login_failed user=support ip=198.51.100.23 path=/api/login reason=bad_password
+2026-09-02 16:40:17 WARNING login_failed user=billing ip=198.51.100.23 path=/api/login reason=bad_password
+2026-09-02 16:40:29 WARNING login_failed user=operator ip=198.51.100.23 path=/api/login reason=bad_password
+2026-09-02 16:40:41 WARNING login_failed user=root ip=198.51.100.23 path=/api/login reason=bad_password
+2026-09-02 16:40:53 WARNING login_failed user=support ip=198.51.100.23 path=/api/login reason=bad_password
+2026-09-02 16:41:05 WARNING login_failed user=billing ip=198.51.100.23 path=/api/login reason=bad_password
+2026-09-02 16:41:17 WARNING login_failed user=operator ip=198.51.100.23 path=/api/login reason=bad_password
+2026-09-02 16:41:29 WARNING login_failed user=root ip=198.51.100.23 path=/api/login reason=bad_password
+2026-09-02 16:41:41 WARNING login_failed user=support ip=198.51.100.23 path=/api/login reason=bad_password
+2026-09-02 16:41:53 WARNING login_failed user=billing ip=198.51.100.23 path=/api/login reason=bad_password
+2026-09-02 16:42:05 WARNING login_failed user=operator ip=198.51.100.23 path=/api/login reason=bad_password
+2026-09-02 16:42:17 WARNING login_failed user=root ip=198.51.100.23 path=/api/login reason=bad_password
+2026-09-02 16:42:29 WARNING login_failed user=support ip=198.51.100.23 path=/api/login reason=bad_password
+2026-09-02 16:42:41 WARNING login_failed user=billing ip=198.51.100.23 path=/api/login reason=bad_password
+2026-09-02 16:43:25 ERROR access_denied user=operator ip=198.51.100.23 path=/admin/export
